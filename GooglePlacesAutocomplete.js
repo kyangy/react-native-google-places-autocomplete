@@ -532,7 +532,7 @@ export default class GooglePlacesAutocomplete extends Component {
     }
 
     return (
-      <Text style={[{flex: 1}, this.props.suppressDefaultStyles ? {} : defaultStyles.description, this.props.styles.description, rowData.isPredefinedPlace ? this.props.styles.predefinedPlacesDescription : {}]}
+      <Text style={[{flex: 1, fontSize: moderateScale(15)}, this.props.suppressDefaultStyles ? {} : defaultStyles.description, this.props.styles.description, rowData.isPredefinedPlace ? this.props.styles.predefinedPlacesDescription : {}]}
         numberOfLines={this.props.numberOfLines}
       >
         {this._renderDescription(rowData)}
@@ -702,7 +702,7 @@ export default class GooglePlacesAutocomplete extends Component {
                 editable={this.props.editable}
                 returnKeyType={this.props.returnKeyType}
                 autoFocus={this.props.autoFocus}
-                style={{flex: 1}}
+                style={{flex: 1, fontSize: moderateScale(15)}}
                 value={this.state.text}
                 placeholder={this.props.placeholder}
                 onSubmitEditing={this.props.onSubmitEditing}
