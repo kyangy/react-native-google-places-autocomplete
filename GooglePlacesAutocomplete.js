@@ -17,6 +17,13 @@ import {
 import Qs from 'qs';
 import debounce from 'lodash.debounce';
 
+import Icon from 'react-native-vector-icons/FontAwesome';
+
+import {
+  moderateScale,
+  verticalScale,
+} from './responsive';
+
 const WINDOW = Dimensions.get('window');
 
 const defaultStyles = {
@@ -25,7 +32,7 @@ const defaultStyles = {
   },
   textInputContainer: {
     backgroundColor: '#C9C9CE',
-    height: 44,
+    height: verticalScale(44),
     borderTopColor: '#7e7e7e',
     borderBottomColor: '#b5b5b5',
     borderTopWidth: 1 / PixelRatio.get(),
@@ -34,16 +41,10 @@ const defaultStyles = {
   },
   textInput: {
     backgroundColor: '#FFFFFF',
-    height: 28,
-    borderRadius: 5,
-    paddingTop: 4.5,
-    paddingBottom: 4.5,
-    paddingLeft: 10,
-    paddingRight: 10,
-    marginTop: 7.5,
-    marginLeft: 8,
-    marginRight: 8,
-    fontSize: 15,
+    height: verticalScale(28),
+    borderRadius: moderateScale(5),
+    paddingVertical: verticalScale(4.5),
+    fontSize: moderateScale(15),
     flex: 1
   },
   poweredContainer: {
@@ -54,8 +55,8 @@ const defaultStyles = {
   powered: {},
   listView: {},
   row: {
-    padding: 13,
-    height: 44,
+    padding: moderateScale(13),
+    height: verticalScale(44),
     flexDirection: 'row',
   },
   separator: {
@@ -274,7 +275,7 @@ export default class GooglePlacesAutocomplete extends Component {
               'google places autocomplete: request could not be completed or has been aborted'
             );
           } else {
-            this.props.onFail('request could not be completed or has been aborted');
+            this.props.onFail();
           }
         }
       };
@@ -411,11 +412,7 @@ export default class GooglePlacesAutocomplete extends Component {
             }
           }
           if (typeof responseJSON.error_message !== 'undefined') {
-              if(!this.props.onFail)
-                console.warn('google places autocomplete: ' + responseJSON.error_message);
-              else{
-                this.props.onFail(responseJSON.error_message)
-              }
+            console.warn('google places autocomplete: ' + responseJSON.error_message);
           }
         } else {
           // console.warn("google places autocomplete: request could not be completed or has been aborted");
@@ -479,11 +476,7 @@ export default class GooglePlacesAutocomplete extends Component {
             }
           }
           if (typeof responseJSON.error_message !== 'undefined') {
-            if(!this.props.onFail)
-              console.warn('google places autocomplete: ' + responseJSON.error_message);
-            else{
-              this.props.onFail(responseJSON.error_message)
-            }
+            console.warn('google places autocomplete: ' + responseJSON.error_message);
           }
         } else {
           // console.warn("google places autocomplete: request could not be completed or has been aborted");
@@ -683,7 +676,6 @@ export default class GooglePlacesAutocomplete extends Component {
   render() {
     let {
       onFocus,
-      clearButtonMode,
       ...userProps
     } = this.props.textInputProps;
     return (
@@ -695,26 +687,34 @@ export default class GooglePlacesAutocomplete extends Component {
           <View
             style={[this.props.suppressDefaultStyles ? {} : defaultStyles.textInputContainer, this.props.styles.textInputContainer]}
           >
-            {this._renderLeftButton()}
-            <TextInput
-              ref="textInput"
-              editable={this.props.editable}
-              returnKeyType={this.props.returnKeyType}
-              autoFocus={this.props.autoFocus}
-              style={[this.props.suppressDefaultStyles ? {} : defaultStyles.textInput, this.props.styles.textInput]}
-              value={this.state.text}
-              placeholder={this.props.placeholder}
-              onSubmitEditing={this.props.onSubmitEditing}
-              placeholderTextColor={this.props.placeholderTextColor}
-              onFocus={onFocus ? () => {this._onFocus(); onFocus()} : this._onFocus}
-              underlineColorAndroid={this.props.underlineColorAndroid}
-              clearButtonMode={
-                clearButtonMode ? clearButtonMode : "while-editing"
-              }
-              { ...userProps }
-              onChangeText={this._handleChangeText}
-            />
-            {this._renderRightButton()}
+            <View style={[this.props.suppressDefaultStyles ? {} : defaultStyles.textInput, this.props.styles.textInput, {flexDirection: 'row', alignItems: 'center'}]}>
+              <Icon
+                style={{
+                  color: '#8e8e93',
+                  marginHorizontal: moderateScale(13),
+                }}
+                name="map-marker"
+                size={moderateScale(20)}
+              />
+
+              <TextInput
+                ref="textInput"
+                editable={this.props.editable}
+                returnKeyType={this.props.returnKeyType}
+                autoFocus={this.props.autoFocus}
+                style={{flex: 1}}
+                value={this.state.text}
+                placeholder={this.props.placeholder}
+                onSubmitEditing={this.props.onSubmitEditing}
+                placeholderTextColor={this.props.placeholderTextColor}
+                onFocus={onFocus ? () => {this._onFocus(); onFocus()} : this._onFocus}
+                clearButtonMode="while-editing"
+                underlineColorAndroid={this.props.underlineColorAndroid}
+                { ...userProps }
+                onChangeText={this._handleChangeText}
+              />
+              {this._renderRightButton()}
+            </View>
           </View>
         }
         {this._getFlatList()}
@@ -769,7 +769,7 @@ GooglePlacesAutocomplete.propTypes = {
 }
 GooglePlacesAutocomplete.defaultProps = {
   placeholder: 'Search',
-  placeholderTextColor: '#A8A8A8',
+  placeholderTextColor: '#4A4A4A',
   isRowScrollable: true,
   underlineColorAndroid: 'transparent',
   returnKeyType: 'default',
