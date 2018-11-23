@@ -129,6 +129,16 @@ export default class GooglePlacesAutocomplete extends Component {
     this._isMounted = true;
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextProps.value !== nextState.text) {
+      this.setState({
+        text: nextProps.value,
+      });
+    }
+
+    return true;
+  }
+
   componentWillReceiveProps(nextProps) {
     let listViewDisplayed = true;
 
@@ -136,16 +146,16 @@ export default class GooglePlacesAutocomplete extends Component {
       listViewDisplayed = nextProps.listViewDisplayed;
     }
 
-    if (typeof (nextProps.text) !== "undefined" && this.state.text !== nextProps.text) {
-      this.setState({
-          listViewDisplayed: listViewDisplayed
-        },
-        this._handleChangeText(nextProps.text));
-    } else {
-      this.setState({
-        listViewDisplayed: listViewDisplayed
-      });
-    }
+    // if (typeof (nextProps.text) !== "undefined" && this.state.text !== nextProps.text) {
+    //   this.setState({
+    //       listViewDisplayed: listViewDisplayed
+    //     },
+    //     this._handleChangeText(nextProps.text));
+    // } else {
+    //   this.setState({
+    //     listViewDisplayed: listViewDisplayed
+    //   });
+    // }
   }
 
   componentWillUnmount() {
@@ -498,6 +508,8 @@ export default class GooglePlacesAutocomplete extends Component {
 
   _onChangeText = (text) => {
     this._request(text);
+
+    this.props.onChangeText(text);
 
     this.setState({
       text: text,
